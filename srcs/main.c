@@ -2,8 +2,6 @@
 
 int	first_fork(char **env, t_var *var)
 {
-	if (var->file == -1)
-		return (-1);
 	dup2(var->file, STDIN_FILENO);
 	dup2(var->fd[0][1], STDOUT_FILENO);
 	close_first(var);
@@ -24,8 +22,7 @@ int	mid_fork(char **env, t_var *var, int i)
 
 int	last_fork(char **env, t_var *var)
 {
-	if (var->file == -1)
-		return (-1);
+	//fprintf(stderr, "last fork BATARD !!\n");
 	dup2(var->fd[var->n - 1][0], STDIN_FILENO);
 	dup2(var->file, STDOUT_FILENO);
 	close_last(var);
@@ -37,7 +34,9 @@ int	last_fork(char **env, t_var *var)
 int	pipex(char **av, char **env, t_var *var, int i)
 {
 	var->ret = init_forking(av, var, i);
-	if (var->ret != -1)
+	if (var->ret < 0)
+		perror("pipex");
+	if (var->ret == 0)
 	{
 		var->pid[i] = fork();
 		if (var->pid[i] == 0)
@@ -49,12 +48,15 @@ int	pipex(char **av, char **env, t_var *var, int i)
 			else
 				var->ret = mid_fork(env, var, i);
 		}
-		hub_close(var, i);
 	}
+	//fprintf(stderr, "ret = %d pour i = %d\n", var->ret , i);
+	hub_close(var, i);
 	free(var->cmd);
 	var->cmd = NULL;
-	free(var->str[0]);
+	free(var->cmdpath);
+	var->cmdpath = NULL;
 	free(var->str[1]);
+	var->str[1] = NULL;
 	return (var->ret);
 }
 
@@ -72,16 +74,21 @@ int	main(int ac, char **av, char **env)
 	i = 0;
 	while (i <= var.n)
 	{
-		var.ret = pipex(av, env, &var, i);
+		pipex(av, env, &var, i);
+		if (var.ret == 0)
+			waitpid(var.pid[i], &var.status, 0);
 		i++;
 	}
 	i = 0;
-	while (i <= var.n)
+	/*while (i <= var.n)
 	{
 		waitpid(var.pid[i], &var.status, 0);
 		i++;
-	}
+	}*/
 	//waitpid(0, &var.status, 0);
 	exit_pipex(&var);
 	return (var.ret);
 }
+
+// The next test will use the following command:
+//./pipex "/dev/urandom" "cat" "head -1" "outs/test-xx.txt"

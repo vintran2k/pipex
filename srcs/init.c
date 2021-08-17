@@ -6,7 +6,7 @@
 /*   By: vintran <vintran@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 17:57:25 by vintran           #+#    #+#             */
-/*   Updated: 2021/08/17 02:39:50 by vintran          ###   ########.fr       */
+/*   Updated: 2021/08/17 04:36:30 by vintran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ int	init_pipex(t_var *var, char **env)
 {
 	int	i;
 
+	var->path = get_env_path(env);
+	if (!var->path)
+		return (-1);
 	var->fd = malloc(sizeof(int *) * var->n);
 	if (!var->fd)
 		return (-1);
@@ -49,7 +52,6 @@ int	init_pipex(t_var *var, char **env)
 	var->str[0] = NULL;
 	var->str[1] = NULL;
 	var->str[2] = NULL;
-	var->path = get_env_path(env);
 	return (0);
 }
 
@@ -60,23 +62,29 @@ int	init_forking(char **av, t_var *var, int i)
 		var->file = open(av[1], O_RDONLY);
 		if (var->file == -1)
 		{
-			perror("pipex");
-			return (-1);
+			//perror("poipex");
+			//fprintf(stderr, "open de %s failled\n", av[1]);
+			return (-2);
 		}
 	}
 	if (i == var->n)
 	{
-		close(var->file);
+		if (var->file != -1)
+			close(var->file);
 		var->file = open(av[3 + var->n], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (var->file == -1)
-			return (-4);
+		{
+			//fprintf(stderr, "open de %s failled\n", av[3 + var->n]);
+			return (-2);
+		}
 	}
 	var->cmd = get_cmd(av[2 + i]);
-	if (var->cmd == NULL)
+	if (!var->cmd)
 		return (-2);
-	var->str[0] = get_cmdpath(var->cmd, var->path);
-	if (var->str[0] == NULL)
-		return (-6);
+	var->cmdpath = get_cmdpath(var->cmd, var->path);
+	var->str[0] = var->cmdpath;
+	if (!var->str[0])
+		var->str[0] = var->cmd;
 	var->str[1] = get_option(av[2 + i]);
 	return (0);
 }

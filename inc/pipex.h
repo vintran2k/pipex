@@ -8,11 +8,13 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
+# include <errno.h>
 
 typedef struct s_var
 {
 	int		**fd;
 	char	*cmd;
+	char	*cmdpath;
 	char	**path;
 	char	**str;
 	pid_t	*pid;

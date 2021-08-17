@@ -6,7 +6,7 @@
 /*   By: vintran <vintran@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 17:53:08 by vintran           #+#    #+#             */
-/*   Updated: 2021/08/16 19:45:40 by vintran          ###   ########.fr       */
+/*   Updated: 2021/08/17 04:18:09 by vintran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,16 +109,11 @@ void	free_vars(t_var *var)
 void	exit_pipex(t_var *var)
 {
 	free_vars(var);
-	if (var->ret == -1)
-		write(STDERR_FILENO, "error\n", 6);
-	if (var->ret == -6)
-	{
-		write(STDERR_FILENO, "pipex: command not found: ", 25);
-		var->status = 0;
-	}
 	if (var->ret < 0)
+		perror("pipex");
+	/*if (var->ret == -2)
 	{
-		var->exit = WEXITSTATUS(var->status);
-		exit(var->exit);
-	}
+		
+	}*/
+	exit (0);
 }
