@@ -6,7 +6,7 @@
 /*   By: vintran <vintran@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 17:57:25 by vintran           #+#    #+#             */
-/*   Updated: 2021/08/17 04:36:30 by vintran          ###   ########.fr       */
+/*   Updated: 2021/08/18 02:03:57 by vintran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,17 @@ int	init_pipex(t_var *var, char **env)
 {
 	int	i;
 
+	var->exit = 0;
+	var->fork = malloc(sizeof(int) * (var->n + 1));
+	if (!var->fork)
+		return (-1);
 	var->path = get_env_path(env);
 	if (!var->path)
 		return (-1);
 	var->fd = malloc(sizeof(int *) * var->n);
 	if (!var->fd)
 		return (-1);
-	var->pid = malloc(sizeof(pid_t) * (var->n + 2));
+	var->pid = malloc(sizeof(pid_t) * (var->n + 1));
 	if (!var->pid)
 		return (-1);
 	i = 0;

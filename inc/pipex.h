@@ -12,6 +12,7 @@
 
 typedef struct s_var
 {
+	int		i;
 	int		**fd;
 	char	*cmd;
 	char	*cmdpath;
@@ -23,7 +24,7 @@ typedef struct s_var
 	int		status;
 	int		exit;
 	int		ret;
-
+	int		*fork;
 }			t_var;
 
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -44,6 +45,7 @@ void		close_mid(t_var *var, int index);
 void		close_last(t_var *var);
 void		hub_close(t_var *var, int i);
 void		ft_free_tab(char **tab);
+void		execve_error(t_var *var);
 void		exit_pipex(t_var *var);
 
 #endif
