@@ -6,7 +6,7 @@
 /*   By: vintran <vintran@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 17:57:25 by vintran           #+#    #+#             */
-/*   Updated: 2021/08/18 02:03:57 by vintran          ###   ########.fr       */
+/*   Updated: 2021/08/18 18:37:21 by vintran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,10 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-int	init_pipex(t_var *var, char **env)
+int	init_malloc(t_var *var)
 {
 	int	i;
 
-	var->exit = 0;
-	var->fork = malloc(sizeof(int) * (var->n + 1));
-	if (!var->fork)
-		return (-1);
-	var->path = get_env_path(env);
-	if (!var->path)
-		return (-1);
-	var->fd = malloc(sizeof(int *) * var->n);
-	if (!var->fd)
-		return (-1);
-	var->pid = malloc(sizeof(pid_t) * (var->n + 1));
-	if (!var->pid)
-		return (-1);
 	i = 0;
 	while (i < var->n)
 	{
@@ -59,17 +46,34 @@ int	init_pipex(t_var *var, char **env)
 	return (0);
 }
 
+int	init_pipex(t_var *var, int ac, char **env)
+{
+	ft_bzero(var, sizeof(t_var));
+	var->n = ac - 4;
+	var->fork = malloc(sizeof(int) * (var->n + 1));
+	if (!var->fork)
+		return (-1);
+	var->path = get_env_path(env);
+	if (!var->path)
+		return (-1);
+	var->fd = malloc(sizeof(int *) * var->n);
+	if (!var->fd)
+		return (-1);
+	var->pid = malloc(sizeof(pid_t) * (var->n + 1));
+	if (!var->pid)
+		return (-1);
+	if (init_malloc(var) == -1)
+		return (-1);
+	return (0);
+}
+
 int	init_forking(char **av, t_var *var, int i)
 {
 	if (i == 0)
 	{
 		var->file = open(av[1], O_RDONLY);
 		if (var->file == -1)
-		{
-			//perror("poipex");
-			//fprintf(stderr, "open de %s failled\n", av[1]);
 			return (-2);
-		}
 	}
 	if (i == var->n)
 	{
@@ -77,10 +81,7 @@ int	init_forking(char **av, t_var *var, int i)
 			close(var->file);
 		var->file = open(av[3 + var->n], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (var->file == -1)
-		{
-			//fprintf(stderr, "open de %s failled\n", av[3 + var->n]);
 			return (-2);
-		}
 	}
 	var->cmd = get_cmd(av[2 + i]);
 	if (!var->cmd)
