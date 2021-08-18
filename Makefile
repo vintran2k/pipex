@@ -6,15 +6,17 @@
 #    By: vintran <vintran@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/06 17:52:33 by vintran           #+#    #+#              #
-#    Updated: 2021/08/18 20:02:15 by vintran          ###   ########.fr        #
+#    Updated: 2021/08/19 00:23:22 by vintran          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME				=	pipex
+NAME_BONUS			=	pipex_bonus
 SRCS_DIR			=	./srcs/
 INC_DIR				=	./inc/
-SRCS				=	main.c			\
-						ft_split.c		\
+MAIN				=	./srcs/main.c
+MAIN_BONUS			=	./bonus/main_bonus.c
+SRCS				=	ft_split.c		\
 						get_cmd.c		\
 						utils.c			\
 						utils2.c		\
@@ -25,24 +27,31 @@ SRCS				=	main.c			\
 						exit.c
 SRCS_BASENAME		=	$(addprefix $(SRCS_DIR), $(SRCS))
 OBJS				=	$(SRCS_BASENAME:.c=.o)
+MAIN_O				=	$(MAIN:.c=.o)
+MAIN_BONUS_O		=	$(MAIN_BONUS:.c=.o)
 CC					=	clang
 FLAGS				=	-Wall -Wextra -Werror -I $(INC_DIR)
+
 
 .c.o			:
 				$(CC) $(FLAGS) -c $< -o $(<:.c=.o)
 
 all				:	$(NAME)
 
-$(NAME)			:	$(OBJS)
-				$(CC) $(FLAGS) $(OBJS) -o $(NAME)
+$(NAME)			:	$(OBJS) $(MAIN_O)
+				$(CC) $(FLAGS) $(OBJS) $(MAIN_O) -o $(NAME)
 				@echo [$(NAME)] : Created !
 
+bonus			:	$(OBJS) $(MAIN_BONUS_O)
+				$(CC) $(FLAGS) $(OBJS) $(MAIN_BONUS_O) -o $(NAME_BONUS)
+				@echo [$(BONUS_NAME)] : Created !
+
 clean			:
-				rm -f $(OBJS)
-				@echo [$(OBJS)] : Deleted !
+				rm -f $(OBJS) $(MAIN_O) $(MAIN_BONUS_O)
+				@echo [.o] : Deleted !
 
 fclean			:	clean
-				rm -f $(NAME)
+				rm -f $(NAME) $(NAME_BONUS)
 				@echo [$(NAME)] : Deleted !
 
 re				:	fclean all

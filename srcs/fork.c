@@ -6,7 +6,7 @@
 /*   By: vintran <vintran@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/18 19:14:48 by vintran           #+#    #+#             */
-/*   Updated: 2021/08/18 19:46:32 by vintran          ###   ########.fr       */
+/*   Updated: 2021/08/18 23:08:20 by vintran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,29 @@ int	forking(char **av, char **env, t_var *var, int i)
 	free(var->str[1]);
 	var->str[1] = NULL;
 	return (var->ret);
+}
+
+void	pipex(t_var *var, char **av, char **env)
+{
+	while (var->i <= var->n)
+	{
+		forking(av, env, var, var->i);
+		if (var->ret == 0)
+			var->fork[var->i] = 1;
+		else
+			var->fork[var->i] = 0;
+		var->i++;
+	}
+	var->i = 0;
+	while (var->i <= var->n)
+	{
+		if (var->fork[var->i])
+		{
+			waitpid(var->pid[var->i], &var->status, 0);
+			if (WIFEXITED(var->status))
+				var->exit = WEXITSTATUS(var->status);
+		}
+		var->i++;
+	}
+	exit_pipex(var);
 }

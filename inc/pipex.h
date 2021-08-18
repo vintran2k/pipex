@@ -42,6 +42,7 @@ char		*get_option(char *av);
 char		*get_cmdpath(char *cmd, char **path);
 void		ft_bzero(void *s, size_t n);
 int			init_pipex(t_var *var, int ac, char **env);
+void		pipex(t_var *var, char **av, char **env);
 int			init_forking(char **av, t_var *var, int i);
 int			first_fork(char **env, t_var *var);
 int			mid_fork(char **env, t_var *var, int i);
