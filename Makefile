@@ -6,7 +6,7 @@
 #    By: vintran <vintran@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/06 17:52:33 by vintran           #+#    #+#              #
-#    Updated: 2021/08/19 00:23:22 by vintran          ###   ########.fr        #
+#    Updated: 2021/08/19 00:34:38 by vintran          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ $(NAME)			:	$(OBJS) $(MAIN_O)
 
 bonus			:	$(OBJS) $(MAIN_BONUS_O)
 				$(CC) $(FLAGS) $(OBJS) $(MAIN_BONUS_O) -o $(NAME_BONUS)
-				@echo [$(BONUS_NAME)] : Created !
+				@echo [$(NAME_BONUS)] : Created !
 
 clean			:
 				rm -f $(OBJS) $(MAIN_O) $(MAIN_BONUS_O)

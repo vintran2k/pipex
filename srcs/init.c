@@ -6,7 +6,7 @@
 /*   By: vintran <vintran@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 17:57:25 by vintran           #+#    #+#             */
-/*   Updated: 2021/08/18 18:37:21 by vintran          ###   ########.fr       */
+/*   Updated: 2021/08/19 01:59:32 by vintran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	init_forking(char **av, t_var *var, int i)
 	{
 		if (var->file != -1)
 			close(var->file);
-		var->file = open(av[3 + var->n], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		var->file = open(av[3 + var->n], O_WRONLY | O_CREAT | O_TRUNC, 0664);
 		if (var->file == -1)
 			return (-2);
 	}
