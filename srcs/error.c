@@ -6,7 +6,7 @@
 /*   By: vintran <vintran@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:43:38 by vintran           #+#    #+#             */
-/*   Updated: 2021/08/18 19:50:52 by vintran          ###   ########.fr       */
+/*   Updated: 2021/08/19 19:42:02 by vintran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	execve_error(t_var *var)
 			ft_putstr_fd(var->cmd, STDERR_FILENO);
 			ft_putstr_fd(" is a directory\n", STDERR_FILENO);
 		}
+		else
+			perror("pipex");
 	}
 	else
 		cmd_not_found(var->cmd);
