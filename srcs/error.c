@@ -6,7 +6,7 @@
 /*   By: vintran <vintran@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:43:38 by vintran           #+#    #+#             */
-/*   Updated: 2021/08/20 19:40:10 by vintran          ###   ########.fr       */
+/*   Updated: 2021/08/20 19:55:52 by vintran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	execve_error(t_var *var)
 
 	if (!var->path)
 		perror("pipex");
-	else if (!ft_strncmp(var->cmd, "..", ft_strlen(var->str[0])))
+	else if (!ft_strncmp(var->cmd, "..", ft_strlen(var->cmd)))
 		perror("pipex");
 	else if (is_slash(var->str[0]))
 	{
