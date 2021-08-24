@@ -6,14 +6,14 @@
 #    By: vintran <vintran@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/06 17:52:33 by vintran           #+#    #+#              #
-#    Updated: 2021/08/19 00:34:38 by vintran          ###   ########.fr        #
+#    Updated: 2021/08/24 20:48:25 by vintran          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME				=	pipex
 NAME_BONUS			=	pipex_bonus
 SRCS_DIR			=	./srcs/
-INC_DIR				=	./inc/
+HEADER				=	./inc/pipex.h
 MAIN				=	./srcs/main.c
 MAIN_BONUS			=	./bonus/main_bonus.c
 SRCS				=	ft_split.c		\
@@ -30,7 +30,7 @@ OBJS				=	$(SRCS_BASENAME:.c=.o)
 MAIN_O				=	$(MAIN:.c=.o)
 MAIN_BONUS_O		=	$(MAIN_BONUS:.c=.o)
 CC					=	clang
-FLAGS				=	-Wall -Wextra -Werror -I $(INC_DIR)
+FLAGS				=	-Wall -Wextra -Werror -I ./inc/
 
 
 .c.o			:
@@ -38,7 +38,7 @@ FLAGS				=	-Wall -Wextra -Werror -I $(INC_DIR)
 
 all				:	$(NAME)
 
-$(NAME)			:	$(OBJS) $(MAIN_O)
+$(NAME)			:	$(OBJS) $(MAIN_O) $(HEADER)
 				$(CC) $(FLAGS) $(OBJS) $(MAIN_O) -o $(NAME)
 				@echo [$(NAME)] : Created !
 
